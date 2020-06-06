@@ -1,8 +1,6 @@
 package scenarios;
 
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 import setup.BaseTest;
@@ -17,13 +15,16 @@ public class webMobileTests extends BaseTest {
         getDriver().get(ResourceManager.getProperty("url")); // open Google homepage
 
         // Make sure that page has been loaded completely
-        new WebDriverWait(getDriver(), 10).until(
+        new WebDriverWait(getDriver(), 15).until(
                 wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete")
         );
 
-        WebElement searchField = getPo().getWelement("searchField");
-        searchField.sendKeys(ResourceManager.getProperty("query"));
-        searchField.sendKeys(Keys.ENTER);
+        getPo().getWelement("searchField").sendKeys(ResourceManager.getProperty("query"));
+        getPo().getWelement("searchButton").click();
+
+        new WebDriverWait(getDriver(), 15).until(
+                wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete")
+        );
 
         assertFalse(
                 getPo().getWelements("results").isEmpty(),

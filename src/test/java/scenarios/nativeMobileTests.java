@@ -16,12 +16,12 @@ import java.nio.file.Paths;
 
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 import static utils.ResourceManager.getProperty;
 
 
 public class nativeMobileTests extends BaseTest {
-    @Test(groups = {"native"}, description = "Check that user is on the Budget Activity page after login")
+    @Test(groups = {"native", "nativeCloud"}, description = "Check that user is on the Budget Activity page after login")
     public void simpleNativeTest() throws IllegalAccessException, NoSuchFieldException, InstantiationException {
         String email = ResourceManager.getProperty("email");
         String password = ResourceManager.getProperty("password");
@@ -31,14 +31,16 @@ public class nativeMobileTests extends BaseTest {
         getPo().getWelement("username").sendKeys(ResourceManager.getProperty("username"));
         getPo().getWelement("password").sendKeys(password);
         getPo().getWelement("confirmPassword").sendKeys(password);
-        getPo().getWelement("registerAccount").click();
+        getPo().getWelement("agreamentsBtn").click();
+        getPo().getWelement("registerAccountBtn").click();
         getPo().getWelement("loginEmail").sendKeys(email);
         getPo().getWelement("loginPassword").sendKeys(password);
         getPo().getWelement("signInBtn").click();
 
-        assertEquals(
-                getPo().getWelement("budgetActivityTitle").getText(),
-                ResourceManager.getProperty("nameOfOpenedPage")
+        assertTrue(
+                getPo().getWelements("navigationBarElements").stream()
+                        .anyMatch(we -> we.getText().contains(getProperty("nameOfOpenedPage"))),
+                "There is no Budget in title"
         );
 
         // Log that test finished

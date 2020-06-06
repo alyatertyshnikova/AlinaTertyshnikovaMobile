@@ -11,6 +11,9 @@ public class WebPageObject {
     @FindBy(xpath = "//input[@name='q']")
     WebElement searchField;
 
+    @FindBy(xpath = "//div[@class='gBCQ5d']")
+    WebElement searchButton;
+
     @FindBy(xpath = "//div[@class='mnr-c xpd O9g5cc uUPGi']")
     List<WebElement> results;
 

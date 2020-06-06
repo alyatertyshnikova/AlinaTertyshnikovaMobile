@@ -32,7 +32,8 @@
                         <suiteXmlFile>${suite.file}</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
-                        <ts.appium>http://localhost:4723/wd/hub</ts.appium>
+                        <!--                        <ts.appium>http://localhost:4723/wd/hub</ts.appium>-->
+                        <ts.appium>https://EPM-TSTF:${token}@mobilecloud.epam.com/wd/hub</ts.appium>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -48,14 +49,18 @@
         </plugins>
     </build>
 
+    <properties>
+        <token>${token}</token>
+    </properties>
+
     <profiles>
         <profile>
             <id>native</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <suite.file>src/test/resources/nativeTNG.xml</suite.file>
+                <suite.file>src/test/resources/hw2/nativeTNG.xml</suite.file>
             </properties>
         </profile>
 
@@ -65,7 +70,47 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <suite.file>./src/test/resources/webTNG.xml</suite.file>
+                <suite.file>./src/test/resources/hw2/webTNG.xml</suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>webCloudAndroid</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>./src/test/resources/hw3/webAndroidCloudTNG.xml</suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>nativeCloudAndroid</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>./src/test/resources/hw3/nativeAndroidCloudTNG.xml</suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>webCloudIOS</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>./src/test/resources/hw3/webIOSCloudTNG.xml</suite.file>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>nativeCloudIOS</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <suite.file>./src/test/resources/hw3/nativeIOSCloudTNG.xml</suite.file>
             </properties>
         </profile>
     </profiles>
