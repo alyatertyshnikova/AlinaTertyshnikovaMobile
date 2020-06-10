@@ -1,11 +1,9 @@
 package setup;
 
 import io.appium.java_client.AppiumDriver;
+import io.restassured.RestAssured;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
 import pageObjects.PageObject;
 
 import java.io.File;
@@ -31,7 +29,7 @@ public class BaseTest implements IDriver {
     }
 
     @Parameters({"platformName", "appType", "deviceName", "udid", "browserName", "app", "appPackage", "appActivity", "bundleId"})
-    @BeforeMethod(alwaysRun = true)
+    @BeforeSuite(alwaysRun = true)
     public void setUp(String platformName,
                       String appType,
                       @Optional("") String deviceName,
@@ -50,10 +48,15 @@ public class BaseTest implements IDriver {
         setPageObject(appType, appiumDriver);
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterSuite(alwaysRun = true)
     public void tearDown() {
         System.out.println("After");
         appiumDriver.closeApp();
+    }
+
+    @AfterMethod(groups = {"nativeCloud"})
+    public void tearDownMethod() {
+        appiumDriver.resetApp();
     }
 
     private void setAppiumDriver(String platformName, String deviceName, String udid, String browserName,
@@ -73,7 +76,6 @@ public class BaseTest implements IDriver {
         capabilities.setCapability("appActivity", appActivity);
 
         capabilities.setCapability("bundleId", bundleId);
-
         try {
             appiumDriver = new AppiumDriver(new URL(System.getProperty("ts.appium")), capabilities);
             System.out.println("Driver" + appiumDriver);
@@ -91,11 +93,11 @@ public class BaseTest implements IDriver {
     }
 
     private void setAppOnDevice(String app, String udid) throws IOException {
-        String[] command = {
-                "curl", "-k", "-v", "-H", "Authorization: Bearer " + System.getProperty("token"),
-                "-F", "file=@" + (new File(app)).getAbsolutePath(),
-                getProperty("endpoint") + udid
-        };
-        Process process = new ProcessBuilder(command).start();
+        RestAssured.given().baseUri(getProperty("endpoint"))
+                .header("Authorization", "Bearer " + System.getProperty("token"))
+                .multiPart(new File((new File(app)).getAbsolutePath()))
+                .pathParam("serial", udid)
+                .post("/{serial}");
     }
 }
+

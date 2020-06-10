@@ -1,20 +1,18 @@
 package scenarios;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.imagecomparison.OccurrenceMatchingOptions;
 import io.appium.java_client.imagecomparison.OccurrenceMatchingResult;
-import org.openqa.selenium.OutputType;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import setup.BaseTest;
 import utils.ResourceManager;
+import utils.ScreenshotAnalysis;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.apache.commons.codec.binary.Base64.encodeBase64;
 import static org.apache.commons.codec.binary.Base64.encodeBase64String;
 import static org.testng.Assert.assertTrue;
 import static utils.ResourceManager.getProperty;
@@ -54,15 +52,9 @@ public class nativeMobileTests extends BaseTest {
         byte[] errorMessageImage = Files.readAllBytes(Paths.get(getProperty("pathToImageWithErrorMessage")));
         new WebDriverWait(getDriver(), 10)
                 .until(wd -> ((AppiumDriver) wd).findElementByImage(encodeBase64String(errorMessageImage)).isDisplayed());
-        byte[] screenshot = encodeBase64(getDriver().getScreenshotAs(OutputType.BYTES));
 
-        OccurrenceMatchingResult result = getDriver()
-                .findImageOccurrence(screenshot, encodeBase64(errorMessageImage),
-                        new OccurrenceMatchingOptions()
-                                .withThreshold(0.8)
-                                .withEnabledVisualization());
-
-        Assert.assertNotNull(result.getRect(), "No error message");
+        OccurrenceMatchingResult analysisResult = ScreenshotAnalysis.findImageOnScreenshot(getDriver(), errorMessageImage);
+        Assert.assertNotNull(analysisResult.getRect(), "No error message");
 
         // Log that test finished
         System.out.println("Android native test with AutoCompleteTextView done");

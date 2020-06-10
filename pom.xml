@@ -19,6 +19,12 @@
             <artifactId>testng</artifactId>
             <version>7.1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>4.3.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -48,10 +54,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <token>${token}</token>
-    </properties>
 
     <profiles>
         <profile>
@@ -87,7 +89,7 @@
         <profile>
             <id>nativeCloudAndroid</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <suite.file>./src/test/resources/hw3/nativeAndroidCloudTNG.xml</suite.file>
@@ -97,7 +99,7 @@
         <profile>
             <id>webCloudIOS</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <suite.file>./src/test/resources/hw3/webIOSCloudTNG.xml</suite.file>
@@ -107,7 +109,7 @@
         <profile>
             <id>nativeCloudIOS</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
                 <suite.file>./src/test/resources/hw3/nativeIOSCloudTNG.xml</suite.file>

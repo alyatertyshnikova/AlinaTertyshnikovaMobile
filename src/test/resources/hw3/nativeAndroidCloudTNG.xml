@@ -1,7 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Android native mobile cloud testing Suite">
     <parameter name="appType" value="native"></parameter>
-    <parameter name="deviceName" value="SAMSUNG SM-G950F"></parameter>
     <parameter name="udid" value="ce11171b791f6c0603"></parameter>
     <parameter name="platformName" value="Android"></parameter>
     <parameter name="app" value="./src/main/resources/EPAMTestApp.apk"></parameter>
