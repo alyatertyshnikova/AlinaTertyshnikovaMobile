@@ -26,17 +26,22 @@ public class BaseTest implements IDriver {
     }
 
     @Parameters({"platformName", "appType", "deviceName", "browserName", "app"})
-    @BeforeMethod(alwaysRun = true)
+    @BeforeSuite(alwaysRun = true)
     public void setUp(String platformName, String appType, String deviceName, @Optional("") String browserName, @Optional("") String app) throws Exception {
         System.out.println("Before: app type - " + appType);
         setAppiumDriver(platformName, deviceName, browserName, app);
         setPageObject(appType, appiumDriver);
     }
 
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() throws Exception {
+    @AfterSuite(alwaysRun = true)
+    public void tearDown() {
         System.out.println("After");
         appiumDriver.closeApp();
+    }
+
+    @AfterMethod(groups = {"native"})
+    public void tearDownMethod() {
+        appiumDriver.resetApp();
     }
 
     private void setAppiumDriver(String platformName, String deviceName, String browserName, String app) {
@@ -64,6 +69,4 @@ public class BaseTest implements IDriver {
     private void setPageObject(String appType, AppiumDriver appiumDriver) throws Exception {
         po = new PageObject(appType, appiumDriver);
     }
-
-
 }
